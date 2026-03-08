@@ -23,24 +23,59 @@ export default function WishlistPage() {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
 
+  const [loading, setLoading] = useState(true);
+  const [addingGift, setAddingGift] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
+
   useEffect(() => {
     async function fetchGifts() {
+      setLoading(true);
+
       const { data, error } = await supabase
         .from("gifts")
-        .select("*")
+        .select("id, title, price, url, image")
         .eq("wishlist_id", id)
-        .order("created_at");
+        .order("created_at", { ascending: true });
 
       if (error) {
         console.error(error.message);
+        setLoading(false);
         return;
       }
 
-      setGifts(data || []);
+      setGifts((data as Gift[]) || []);
+      setLoading(false);
     }
 
     fetchGifts();
   }, [id]);
+
+  async function fetchPreview() {
+    const cleanUrl = url.trim();
+
+    if (!cleanUrl.startsWith("http")) return;
+
+    try {
+      setPreviewLoading(true);
+
+      const res = await fetch("/api/preview", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: cleanUrl }),
+      });
+
+      const data = await res.json();
+
+      if (data.title) setTitle(data.title);
+      if (data.image) setImage(data.image);
+    } catch (error) {
+      console.error("Preview failed:", error);
+    } finally {
+      setPreviewLoading(false);
+    }
+  }
 
   async function addGift(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,25 +86,37 @@ export default function WishlistPage() {
 
     if (!cleanTitle) return;
 
-    const { error } = await supabase.from("gifts").insert({
+    setAddingGift(true);
+
+    const payload = {
       wishlist_id: id,
       title: cleanTitle,
       url: cleanUrl || null,
       price: price ? Number(price) : null,
       image: cleanImage || null,
-    });
+    };
+
+    const { data, error } = await supabase
+      .from("gifts")
+      .insert(payload)
+      .select("id, title, price, url, image")
+      .single();
 
     if (error) {
       alert(error.message);
+      setAddingGift(false);
       return;
+    }
+
+    if (data) {
+      setGifts((prev) => [...prev, data as Gift]);
     }
 
     setTitle("");
     setUrl("");
     setPrice("");
     setImage("");
-
-    window.location.reload();
+    setAddingGift(false);
   }
 
   return (
@@ -96,23 +143,17 @@ export default function WishlistPage() {
               className="w-full rounded-xl border p-3"
               placeholder="Product URL"
               value={url}
-              onChange={async (e) => {
-                const value = e.target.value;
-                setUrl(value);
-
-                if (value.startsWith("http")) {
-                  const res = await fetch("/api/preview", {
-                    method: "POST",
-                    body: JSON.stringify({ url: value }),
-                  });
-
-                  const data = await res.json();
-
-                  if (data.title) setTitle(data.title);
-                  if (data.image) setImage(data.image);
-                }
-              }}
+              onChange={(e) => setUrl(e.target.value)}
             />
+
+            <button
+              type="button"
+              onClick={fetchPreview}
+              disabled={previewLoading || !url.trim()}
+              className="w-fit rounded-xl border px-4 py-2 text-sm hover:bg-gray-50 disabled:opacity-50"
+            >
+              {previewLoading ? "Loading preview..." : "Fetch preview"}
+            </button>
             <input
               className="w-full rounded-xl border p-3"
               placeholder="Price"
@@ -129,15 +170,20 @@ export default function WishlistPage() {
 
             <button
               type="submit"
-              className="mt-2 w-fit rounded-xl border px-4 py-2 hover:bg-gray-50"
+              disabled={addingGift}
+              className="mt-2 w-fit rounded-xl border px-4 py-2 hover:bg-gray-50 disabled:opacity-50"
             >
-              Add gift
+              {addingGift ? "Adding..." : "Add gift"}
             </button>
           </div>
         </form>
 
         <div className="max-w-5xl">
-          {gifts.length === 0 ? (
+          {loading ? (
+            <div className="rounded-xl border border-dashed p-6 text-sm text-gray-500">
+              Loading gifts...
+            </div>
+          ) : gifts.length === 0 ? (
             <div className="rounded-xl border border-dashed p-6 text-sm text-gray-500">
               No gifts yet. Add your first gift above.
             </div>
@@ -162,6 +208,7 @@ export default function WishlistPage() {
                       </div>
                     )}
                   </div>
+
                   <div className="p-4">
                     <h3 className="text-lg font-semibold">{gift.title}</h3>
 
