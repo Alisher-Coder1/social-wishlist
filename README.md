@@ -26,3 +26,17 @@ PostgreSQL
 TailwindCSS
 
 ## Run locally
+
+npm install 
+npm run dev
+
+Open:
+http://localhost:3000
+
+## Project structure
+
+src/app src/lib src/api
+
+## Author
+
+Alisher
