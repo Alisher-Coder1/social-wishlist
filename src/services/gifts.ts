@@ -5,10 +5,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "www.apple.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.borsavita.ru",
       },
     ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

@@ -1,29 +1,26 @@
 import { NextResponse } from "next/server"
-import * as cheerio from "cheerio"
+import ogs from "open-graph-scraper"
 
 export async function POST(req: Request) {
-  const { url } = await req.json()
-
   try {
-    const res = await fetch(url)
-    const html = await res.text()
+    const { url } = await req.json()
 
-    const $ = cheerio.load(html)
+    if (!url) {
+      return NextResponse.json({ error: "No URL" }, { status: 400 })
+    }
 
-    const title =
-      $('meta[property="og:title"]').attr("content") ||
-      $("title").text()
-
-    const image = $('meta[property="og:image"]').attr("content")
+    const { result } = await ogs({ url })
 
     return NextResponse.json({
-      title,
-      image,
+      title: result.ogTitle || "",
+      image: result.ogImage?.[0]?.url || ""
     })
-  } catch {
-    return NextResponse.json({
-      title: "",
-      image: "",
-    })
+  } catch (error) {
+    console.error(error)
+
+    return NextResponse.json(
+      { error: "Preview failed" },
+      { status: 500 }
+    )
   }
 }
