@@ -29,5 +29,6 @@ Open: http://localhost:3000
 Project structure
 src/app src/lib src/api
 
-Author
-Alisher
+This project focuses on product logic and real-time functionality rather than visual design.
+The interface is intentionally minimal and built with Tailwind utility classes to keep the codebase simple and maintainable.
+Design improvements could be added later without changing the architecture.

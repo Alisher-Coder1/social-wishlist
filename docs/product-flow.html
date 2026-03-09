@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Wishlist — Product Flow</title>
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #4f46e5;
+      --primary-soft: #eef2ff;
+      --success: #16a34a;
+      --warning: #d97706;
+      --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 42px;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 860px;
+      font-size: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 28px;
+    }
+
+    .card h3 {
+      margin: 24px 0 10px;
+      font-size: 18px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      margin: 36px 0 18px;
+      font-size: 30px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .step {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      min-height: 150px;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      background: #f9fafb;
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .rule {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .rule strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .grid-2,
+      .steps,
+      .rules {
+        grid-template-columns: 1fr;
+      }
+      .hero h1 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Social Wishlist — описание продукта и бизнес-процесса</h1>
+      <p>
+        Social Wishlist — это сервис, в котором собственник создаёт список желаний, добавляет подарки и делится публичной ссылкой.
+        Гости открывают ссылку без регистрации, резервируют подарки или вносят вклад в дорогие покупки.
+        Система синхронизирует изменения в реальном времени и сохраняет эффект сюрприза: собственник не видит, кто именно зарезервировал подарок или скинулся на него.
+      </p>
+      <div class="tag-row">
+        <span class="tag">Owner Flow</span>
+        <span class="tag">Guest Flow</span>
+        <span class="tag">Realtime</span>
+        <span class="tag">Privacy by Design</span>
+        <span class="tag">Product Traceability</span>
+      </div>
+    </section>
+
+    <div class="grid-2">
+      <section class="card">
+        <h2>Роль 1 — Собственник списка</h2>
+        <p class="muted">
+          Это основной пользователь продукта. Он создаёт wishlist, управляет содержимым списка и делится ссылкой с друзьями.
+        </p>
+
+        <h3>Что делает собственник</h3>
+        <ul>
+          <li>Регистрируется или входит в систему.</li>
+          <li>Создаёт новый список желаний.</li>
+          <li>Указывает название списка и описание.</li>
+          <li>Добавляет подарки: название, ссылку, цену, изображение.</li>
+          <li>Получает публичную ссылку на список.</li>
+          <li>Отправляет ссылку друзьям и родственникам.</li>
+          <li>Следит за статусом подарков и прогрессом сборов.</li>
+        </ul>
+
+        <h3>Что видит собственник</h3>
+        <ul>
+          <li>Название wishlist.</li>
+          <li>Список подарков.</li>
+          <li>Статус подарка: доступен / зарезервирован / идёт сбор.</li>
+          <li>Общий прогресс по денежному сбору.</li>
+          <li>Публичную ссылку для распространения.</li>
+        </ul>
+
+        <h3>Что собственник не должен видеть</h3>
+        <ul>
+          <li>Кто именно зарезервировал подарок.</li>
+          <li>Кто именно внёс вклад.</li>
+          <li>Индивидуальные суммы конкретных участников, если это нарушает эффект сюрприза.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Роль 2 — Гости</h2>
+        <p class="muted">
+          Это друзья, родственники или коллеги, которые получают публичную ссылку. Для базового сценария им не нужен логин.
+        </p>
+
+        <h3>Что делают гости</h3>
+        <ul>
+          <li>Открывают публичную ссылку без регистрации.</li>
+          <li>Просматривают список подарков.</li>
+          <li>Выбирают подарок и резервируют его.</li>
+          <li>Если подарок дорогой — вносят вклад в общую сумму.</li>
+          <li>Видят актуальный статус без перезагрузки страницы.</li>
+        </ul>
+
+        <h3>Что видят гости</h3>
+        <ul>
+          <li>Название и описание списка.</li>
+          <li>Карточки подарков.</li>
+          <li>Кнопки действий: открыть товар, забронировать, внести вклад.</li>
+          <li>Прогресс-бар по дорогим подаркам.</li>
+          <li>Обновления в реальном времени.</li>
+        </ul>
+
+        <h3>Что гости не должны делать</h3>
+        <ul>
+          <li>Редактировать список собственника.</li>
+          <li>Удалять подарки.</li>
+          <li>Видеть служебные данные системы.</li>
+        </ul>
+      </section>
+    </div>
+
+    <h2 class="section-title">Сквозной бизнес-процесс продукта</h2>
+    <section class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <strong>Создание списка</strong>
+        <p class="muted">Собственник регистрируется, заходит в систему и создаёт новый wishlist.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <strong>Добавление подарков</strong>
+        <p class="muted">Собственник добавляет подарки, ссылки, цены, изображения и описание.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <strong>Публичная ссылка</strong>
+        <p class="muted">Система генерирует public link, который можно отправить друзьям.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <strong>Действия гостей</strong>
+        <p class="muted">Гости открывают ссылку, резервируют подарок или вносят вклад в дорогую покупку.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">5</div>
+        <strong>Realtime и приватность</strong>
+        <p class="muted">Все изменения синхронизируются без перезагрузки, но собственник не видит личности участников.</p>
+      </div>
+    </section>
+
+    <h2 class="section-title">Функциональное раскрытие ролей</h2>
